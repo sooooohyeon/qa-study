@@ -26,4 +26,33 @@ def test_create_user():
     assert response.json()["name"] == "전소현"
     assert response.json()["email"] == "sohyeon@test.com"
 
+# 테스트 4: 유저 정보 수정 (PUT)
+def test_update_user():
+    payload = {
+        "name": "전소현 수정됨",
+        "email": "updated@test.com"
+    }
+    response = requests.put("https://jsonplaceholder.typicode.com/users/1", json=payload)
+    
+    assert response.status_code == 200
+    assert response.json()["name"] == "전소현 수정됨"
+    assert response.json()["email"] == "updated@test.com"
+
+# 테스트 5: 유저 삭제 (DELETE)
+def test_delete_user():
+    response = requests.delete("https://jsonplaceholder.typicode.com/users/1")
+    
+    assert response.status_code == 200
+
+# 테스트 6: 잘못된 형식의 데이터로 생성 요청 (엣지케이스)
+def test_create_user_with_empty_body():
+    response = requests.post("https://jsonplaceholder.typicode.com/users", json={})
+    
+    # JSONPlaceholder는 빈 값이어도 201을 반환 (가짜 서버 특성)
+    # 실제 서버라면 400 Bad Request가 와야 정상
+    print(f"상태코드: {response.status_code}")
+    print(f"응답값: {response.json()}")
+    
+    assert response.status_code == 201
+    
 
